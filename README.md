@@ -16,3 +16,16 @@
 
 - Orchestration with Terraform
 - From an AMI to EC2 instance with customised configuration
+
+
+## Using Terraform
+
+- File extensions are .tf
+- Language used is HCL, similar to JSON in syntax
+
+**Commands**
+
+- ``terraform init`` to initialise terraform
+- ``terraform plan`` to plan
+    - provides a summary of instances to add, change, and destroy
+- ``terraform apply`` to run the .tf file
