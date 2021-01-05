@@ -27,5 +27,6 @@
 
 - ``terraform init`` to initialise terraform
 - ``terraform plan`` to plan
+    - **Terraform will look for the keys stored as environment variables**
     - provides a summary of instances to add, change, and destroy
 - ``terraform apply`` to run the .tf file
