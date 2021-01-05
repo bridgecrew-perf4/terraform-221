@@ -4,7 +4,7 @@ provider "aws" {
 	region = "eu-west-1"
 }
 
-
+# create security group allowing access on port 27017
 resource "aws_security_group" "mongo_access"{
 	name = "eng74-leo-terra-mongo-access"
 	description = "Allow traffic on port 27017 for mongoDB"
@@ -32,6 +32,7 @@ resource "aws_security_group" "mongo_access"{
 	}
 }
 
+# create mongodb instance and assign newly created security group
 resource "aws_instance" "mongodb_instance" {
 	ami = "ami-03646b6976790491d"
 	instance_type = "t2.micro"
@@ -43,6 +44,7 @@ resource "aws_instance" "mongodb_instance" {
 	}
 }
 
+# create nodejs app instance
 resource "aws_instance" "nodejs_instance" {
 	ami = "ami-0651ff04b9b983c9f"
 	instance_type = "t2.micro"
@@ -53,14 +55,16 @@ resource "aws_instance" "nodejs_instance" {
 		Name = "eng74-leo-terraform-app"
 	}
 
-
-	provisioner "remote-exec"{
 	connection {
 		type = "ssh"
-		user = "ec2-user"
-		private_key = "${file("/c/Users/daiji/.ssh/eng74_leo_aws_key")}"
+		user = "ubuntu"
+		private_key = "${file("~/.ssh/eng74_leo_aws_key.pem")}"
 		host = "${self.public_ip}"
+		
 	} 
+
+	# export private ip of mongodb instance and start app
+	provisioner "remote-exec"{
 		inline = [
 			"export DB_HOST=${aws_instance.mongodb_instance.private_ip}",
 			"cd app/ && pm2 start app.js",
