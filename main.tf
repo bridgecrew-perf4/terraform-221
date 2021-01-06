@@ -1,5 +1,4 @@
 # Cloud provider required, in this case using AWS
-
 provider "aws" {
 	region = "eu-west-1"
 }
@@ -60,7 +59,6 @@ resource "aws_instance" "nodejs_instance" {
 		user = "ubuntu"
 		private_key = "${file("~/.ssh/eng74_leo_aws_key.pem")}"
 		host = "${self.public_ip}"
-		
 	} 
 
 	# export private ip of mongodb instance and start app
