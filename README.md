@@ -30,6 +30,8 @@
     - provides a summary of instances to add, change, and destroy
 - ``terraform apply`` to run the .tf file
 
+
+
 ### Provider
 
 Specify the cloud provider to build instances on
@@ -39,6 +41,19 @@ provider "aws" {
 }
 ```
 There is no need to specify access/secret keys, **Terraform will look for the keys stored as environment variables**
+
+### Resources
+
+Resources are the most important element in the Terraform language
+
+Each resource block desc ribes one or more infrastructure objects, such as
+- virtual networks
+- compute instances
+- higher-level components such as DNS records
+
+A ``resource`` block declares a resource of a given type, and a given local name which can be used to refer to the resource from elsewhere in the same Terraform module
+
+The resource type and name together serve as an identifier for a given resource and so must be unique within a module
 
 ### Security Groups
 
