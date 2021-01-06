@@ -312,6 +312,7 @@ resource "aws_instance" "nodejs_instance" {
 	# export private ip of mongodb instance and start app
 	provisioner "remote-exec"{
 		inline = [
+			"echo \"export DB_HOST=${aws_instance.mongodb_instance.private_ip}\" >> /home/ubuntu/.bashrc",
 			"export DB_HOST=${aws_instance.mongodb_instance.private_ip}",
 			"cd app/ && pm2 start app.js",
 		]
