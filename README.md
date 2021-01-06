@@ -33,8 +33,6 @@
 - ``terraform apply`` to run the .tf file
 - ``terraform destroy`` to destroy Terraform-managed infrastructure
 
-
-
 ### Provider
 
 Specify the cloud provider to build instances on
@@ -58,6 +56,20 @@ A ``resource`` block declares a resource of a given type, and a given local name
 
 The resource type and name together serve as an identifier for a given resource and so must be unique within a module
 
+### VPCs
+
+To configure VPC, several resources are required, the setup for each is reasonably straightforward so only key points will be mentioned:
+- ``aws_vpc``
+- ``aws_internet_gateway``
+- ``aws_subnet``
+    - For public subnets, set ``map_public_ip_on_launch`` to ``true``
+- ``aws_route_table``
+    - Terraform will route the VPC CIDR block to local by default so only 0.0.0.0/0 to the IGW is required
+- ``aws_route_table_association``
+- ``aws_network_acl``
+    - list of subnet IDs to associate with are specified
+
+
 ### Security Groups
 
 Security groups can be created with the resource ``aws_security_group`` specifying:
@@ -69,17 +81,17 @@ Security groups can be created with the resource ``aws_security_group`` specifyi
     - Either CIDR blocks or security groups can be specified to identify sources
 - tags
 ```
-resource "aws_security_group" "mongo_access"{
-	name = "eng74-leo-terra-mongo-access"
+resource "aws_security_group" "mongodb_sg"{
+	name = "eng74-leo-terra-mongodb_sg"
 	description = "Allow traffic on port 27017 for mongoDB"
-	vpc_id = "vpc-07e47e9d90d2076da"
+	vpc_id = aws_vpc.main.id
 
 	ingress {
 		description = "27017 from app instance"
 		from_port = 27017
 		to_port = 27017
 		protocol = "tcp"
-		security_groups = ["sg-09daa57de1874642a"]
+		security_groups = [aws_security_group.nodejs_sg.id]
 	}
 
 	egress {
@@ -92,7 +104,7 @@ resource "aws_security_group" "mongo_access"{
 	}
 
 	tags = {
-		Name = "eng74-leo-terra-mongo-access"
+		Name = "eng74-leo-terra-mongodb_sg"
 	}
 }
 ```
@@ -102,22 +114,24 @@ resource "aws_security_group" "mongo_access"{
 EC2 Instances can be created with the resource ``aws_instance`` specifying:
 - 2nd argument as the resource name for future reference in the terraform file
 - AMI
+- subnet_id
 - Instance type
 - key name (to allow SSH in)
 - ``associate_public_ip_address`` set to true to allow remote access
 - ``vpc_security_group_ids`` if the instances are being created within a VPC then these must be used to specify security groups
 - tags
 ```
-resource "aws_instance" "mongodb_instance" {
-	ami = "ami-03646b6976790491d"
-	instance_type = "t2.micro"
-	key_name = "eng74_leo_aws_key"
+resource "aws_instance" "nodejs_instance" {
+	ami = var.ami_nodejs
+	subnet_id = aws_subnet.public_subnet.id
+	instance_type = var.instance_type
+	key_name = var.aws_key_name
 	associate_public_ip_address = true
-	vpc_security_group_ids = [aws_security_group.mongo_access.id]
+	vpc_security_group_ids = [aws_security_group.nodejs_sg.id]
 	tags = {
-		Name = "eng74-leo-terraform-db"
+		Name = "eng74-leo-terraform-app"
 	}
-}
+
 ```
 
 **Running Shell Commands**
