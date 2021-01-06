@@ -66,9 +66,17 @@ resource "aws_security_group" "nodejs_sg"{
 	vpc_id = var.vpc_id
 
 	ingress {
-		description = "80 from all"
+		description = "HTTP from all"
 		from_port = 80
 		to_port = 80
+		protocol = "tcp"
+		cidr_blocks = ["0.0.0.0/0"]
+	}
+
+	ingress {
+		description = "HTTPS from all"
+		from_port = 443
+		to_port = 443
 		protocol = "tcp"
 		cidr_blocks = ["0.0.0.0/0"]
 	}
@@ -97,7 +105,7 @@ resource "aws_security_group" "nodejs_sg"{
 
 # create security group allowing access on port 27017
 resource "aws_security_group" "db_sg"{
-	name = "eng74-leo-terra-mongo-access"
+	name = "eng74-leo-terra-db_sg"
 	description = "Allow traffic on port 27017 for mongoDB"
 	vpc_id = var.vpc_id
 
