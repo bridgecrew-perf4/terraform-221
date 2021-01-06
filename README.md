@@ -26,9 +26,12 @@
 ### Commands
 
 - ``terraform init`` to initialise terraform
+    - terraform will detect which necessary modules/plugins to download first
+- ``terraform validate`` to assess if configuration is valid
 - ``terraform plan`` to plan
     - provides a summary of instances to add, change, and destroy
 - ``terraform apply`` to run the .tf file
+- ``terraform destroy`` to destroy Terraform-managed infrastructure
 
 
 

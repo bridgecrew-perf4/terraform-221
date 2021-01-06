@@ -31,3 +31,7 @@ variable "aws_key_name" {
 variable "aws_key_path" {
     default = "~/.ssh/eng74_leo_aws_key.pem"
 }
+
+variable "home_cidr" {
+    default = "82.36.72.90/32"
+}
