@@ -8,10 +8,6 @@ variable "vpc_id" {
     default = "vpc-07e47e9d90d2076da"
 }
 
-variable "app_sg_id" {
-    default = "sg-09daa57de1874642a"
-}
-
 variable "ami_mongo" {
     default = "ami-03646b6976790491d"
 }

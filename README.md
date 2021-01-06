@@ -49,7 +49,7 @@ There is no need to specify access/secret keys, **Terraform will look for the ke
 
 Resources are the most important element in the Terraform language
 
-Each resource block desc ribes one or more infrastructure objects, such as
+Each resource block describes one or more infrastructure objects, such as
 - virtual networks
 - compute instances
 - higher-level components such as DNS records
