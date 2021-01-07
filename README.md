@@ -199,11 +199,11 @@ module "vpc" {
 ```
 In this case there is only one variable required: ``my_ip``:
 
-The ``modules/m_db/variables.tf`` file only contains one variable
+The ``modules/m_vpc/variables.tf`` file only contains one variable
 ```
 variable "my_ip" {}
 ```
-Outputs from the ``vpc`` module are defined in the ``modules/m_db/outputs.tf`` file:
+Outputs from the ``vpc`` module are defined in the ``modules/m_vpc/outputs.tf`` file:
 ```
 output "vpc_id" {
     value = aws_vpc.main.id
