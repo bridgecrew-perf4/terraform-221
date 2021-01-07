@@ -1,4 +1,8 @@
 # using variables tf instead of hardcoding in main.tf
+module myip {
+	source = "4ops/myip/http"
+	version = "1.0.0"
+}
 
 variable "region" {
     default = "eu-west-1"
@@ -26,8 +30,4 @@ variable "aws_key_name" {
 
 variable "aws_key_path" {
     default = "~/.ssh/eng74_leo_aws_key.pem"
-}
-
-variable "home_cidr" {
-    default = "82.36.72.90/32"
 }
