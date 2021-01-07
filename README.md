@@ -33,6 +33,8 @@
 - ``terraform apply`` to run the .tf file
 - ``terraform destroy`` to destroy Terraform-managed infrastructure
 
+## Terraform Code
+
 ### Provider
 
 Specify the cloud provider to build instances on
@@ -55,6 +57,21 @@ Each resource block describes one or more infrastructure objects, such as
 A ``resource`` block declares a resource of a given type, and a given local name which can be used to refer to the resource from elsewhere in the same Terraform module
 
 The resource type and name together serve as an identifier for a given resource and so must be unique within a module
+
+### Variables
+
+Variables can be defined in a separate file ``variables.tf`` and then referenced in other .tf files.
+
+To define a variable
+```
+variable "variable_name" {
+	default = "xyz"
+}
+```
+This variable can then be referenced with ``var.``
+```
+argument = var.variable_name
+```
 
 ### VPCs
 
@@ -157,4 +174,55 @@ provisioner "remote-exec"{
 			"cd app/ && pm2 start app.js",
 		]
 	}
+```
+
+## Terraform Modules
+
+Resources and blocks of code can be grouped together to form modules (loosely similar to Classes in OOP) although [should be used in moderation](https://www.terraform.io/docs/modules/index.html#when-to-write-a-module) to avoid overcomplicating code
+
+Modules are contained within a subfolder ``modules/<module_name>/`` and will contain at least 3 files: 
+- ``main.tf``: where most of the actual IAC code will be, but there may be multiple .tf files containing code that will be able to reference each other in their self-contained folder
+- ``outputs.tf``: will contain any outputs (similar to returns) of the module in order for other modules/resources to use
+- ``variables.tf``: will contain any necessary variables to be used within the module, and when calling the module these variables will need to be specified as arguments
+
+These 3 files will also exist outside of the modules folder, essentially as the main controller to call all of the modules.
+
+### Calling a Module, Inputs, and Outputs
+
+To call a module the source and any required arguments must be specified:
+```
+module "vpc" {
+    source = "./modules/m_vpc"
+
+    my_ip = module.myip.address
+}
+```
+In this case there is only one variable required: ``my_ip``:
+
+``modules/m_db/variables.tf`` file only contains one variable
+```
+variable "my_ip" {}
+```
+Outputs from the ``vpc`` module are defined in ``modules/m_db/outputs.tf``:
+```
+output "vpc_id" {
+    value = aws_vpc.main.id
+}
+
+output "public_subnet_id" {
+    value = aws_subnet.public_subnet.id
+}
+
+output "private_subnet_id" {
+    value = aws_subnet.private_subnet.id
+}
+```
+and can then be referenced in the controller ``main.tf`` if required by other modules, for example the VPC ID is required by the security group module
+```
+module "sg" {
+    source = "./modules/m_sg"
+
+    vpc_id = module.vpc.vpc_id
+    my_ip = module.myip.address
+}
 ```
