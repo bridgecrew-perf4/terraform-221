@@ -178,7 +178,7 @@ provisioner "remote-exec"{
 
 ## Terraform Modules
 
-Resources and blocks of code can be grouped together to form modules (loosely similar to Classes in OOP) although [should be used in moderation](https://www.terraform.io/docs/modules/index.html#when-to-write-a-module) to avoid overcomplicating code
+Resources and blocks of code can be grouped together to form modules (loosely similar to Classes in OOP) although [should be used in moderation](https://www.terraform.io/docs/modules/index.html#when-to-write-a-module) to avoid overcomplicating code.
 
 Modules are contained within a subfolder ``modules/<module_name>/`` and will contain at least 3 files: 
 - ``main.tf``: where most of the actual IAC code will be, but there may be multiple .tf files containing code that will be able to reference each other in their self-contained folder
@@ -199,11 +199,11 @@ module "vpc" {
 ```
 In this case there is only one variable required: ``my_ip``:
 
-``modules/m_db/variables.tf`` file only contains one variable
+The ``modules/m_db/variables.tf`` file only contains one variable
 ```
 variable "my_ip" {}
 ```
-Outputs from the ``vpc`` module are defined in ``modules/m_db/outputs.tf``:
+Outputs from the ``vpc`` module are defined in the ``modules/m_db/outputs.tf`` file:
 ```
 output "vpc_id" {
     value = aws_vpc.main.id
