@@ -58,7 +58,7 @@ resource "aws_network_acl" "public_nacl" {
 		protocol = "tcp"
 		rule_no = 120
 		action = "allow"
-		cidr_block = "${module.myip.address}/32"
+		cidr_block = "${var.my_ip}/32"
 		from_port = 22
 		to_port = 22
 	}
@@ -98,7 +98,7 @@ resource "aws_network_acl" "public_nacl" {
 		protocol = "tcp"
 		rule_no = 120
 		action = "allow"
-		cidr_block = "${module.myip.address}/32"
+		cidr_block = "${var.my_ip}/32"
 		from_port = 22
 		to_port = 22
 	}

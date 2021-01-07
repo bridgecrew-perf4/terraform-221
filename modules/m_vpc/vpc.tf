@@ -1,8 +1,3 @@
-# Cloud provider required, in this case using AWS
-provider "aws" {
-	region = var.region
-}
-
 # create VPC
 resource "aws_vpc" "main" {
 	cidr_block = "13.7.0.0/16"

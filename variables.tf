@@ -1,15 +1,6 @@
 # using variables tf instead of hardcoding in main.tf
-module myip {
-	source = "4ops/myip/http"
-	version = "1.0.0"
-}
-
 variable "region" {
     default = "eu-west-1"
-}
-
-variable "vpc_id" {
-    default = "vpc-07e47e9d90d2076da"
 }
 
 variable "ami_mongo" {

@@ -2,7 +2,7 @@
 resource "aws_security_group" "nodejs_sg"{
 	name = "eng74-leo-terra-nodejs_sg"
 	description = "Allow public access for nodejs instnace"
-	vpc_id = aws_vpc.main.id
+	vpc_id = var.vpc_id
 
 	ingress {
 		description = "HTTP from all"
@@ -25,7 +25,7 @@ resource "aws_security_group" "nodejs_sg"{
 		from_port = 22
 		to_port = 22
 		protocol = "tcp"
-		cidr_blocks = ["${module.myip.address}/32"]
+		cidr_blocks = ["${var.my_ip}/32"]
 	}
 
 	egress {
@@ -46,7 +46,7 @@ resource "aws_security_group" "nodejs_sg"{
 resource "aws_security_group" "mongodb_sg"{
 	name = "eng74-leo-terra-mongodb_sg"
 	description = "Allow traffic on port 27017 for mongoDB"
-	vpc_id = aws_vpc.main.id
+	vpc_id = var.vpc_id
 
 	ingress {
 		description = "27017 from app instance"
